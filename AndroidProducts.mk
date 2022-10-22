@@ -6,9 +6,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_evergo.mk
+    $(LOCAL_DIR)/twrp_evergo.mk
 
 COMMON_LUNCH_CHOICES := \
-    omni_evergo-user \
-    omni_evergo-userdebug \
-    omni_evergo-eng
+    twrp_evergo-eng
