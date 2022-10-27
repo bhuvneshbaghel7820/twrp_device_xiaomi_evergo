@@ -6,7 +6,17 @@
 #
 
 LOCAL_PATH := device/xiaomi/evergo
+
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+PRODUCT_SHIPPING_API_LEVEL := 30
+
+# Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
+
 # A/B
+ENABLE_VIRTUAL_AB := true
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
@@ -15,17 +25,11 @@ AB_OTA_POSTINSTALL_CONFIG += \
 
 # Boot control HAL
 PRODUCT_PACKAGES += \
-    android.hardware.boot@1.0-impl \
-    android.hardware.boot@1.0-service
+    android.hardware.boot@1.1-impl.recovery \
+    android.hardware.boot@1.1-service.recovery
 
 PRODUCT_PACKAGES += \
-    bootctrl.mt6833
-
-PRODUCT_STATIC_BOOT_CONTROL_HAL := \
-    bootctrl.mt6833 \
-    libgptutils \
-    libz \
-    libcutils
+    bootctrl.mt6833.recovery
 
 PRODUCT_PACKAGES += \
     otapreopt_script \
@@ -33,3 +37,14 @@ PRODUCT_PACKAGES += \
     update_engine \
     update_verifier \
     update_engine_sideload
+
+# fastbootd
+PRODUCT_PACKAGES += \
+    fastbootd \
+    android.hardware.fastboot@1.0-impl-mock
+
+# Health
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.1-service \
+    android.hardware.health@2.1-impl
+
